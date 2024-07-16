@@ -1,0 +1,16 @@
+flutter_native_splash:
+  
+  color: "#FFFFFF"
+  image: "images/anime/Screenshot 2024-06-18 162720.png"
+  android: true
+  ios: true
+
+
+  android_12:
+    color: "#FFFFFF"
+    image: "images/anime/Screenshot 2024-06-18 162720.png"
+    android: true
+    ios: true
+
+
+  web: false   123
