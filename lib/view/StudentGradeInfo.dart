@@ -294,7 +294,7 @@ class _StudentGradeInfoState extends State<StudentGradeInfo> {
       },
       child: Card(
         color: Colors.white,
-        margin: const EdgeInsets.symmetric(horizontal: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 3),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
@@ -307,7 +307,7 @@ class _StudentGradeInfoState extends State<StudentGradeInfo> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Lottie.asset(pathImage, width: 150, height: 70),
+                  Lottie.asset(pathImage, width: 120, height: 50),
                   const SizedBox(
                     height: 10,
                   ),

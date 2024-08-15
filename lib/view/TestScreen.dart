@@ -194,9 +194,9 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                       ),
                                       const SizedBox(height: 10.0),
                                       Text(
-                                        ' ${employee.employeeName}',
+                                        '${employee.employeeName}',
                                         style: const TextStyle(
-                                          fontSize: 25,
+                                          fontSize: 20,
                                           color: Colors.black87,
                                           fontWeight: FontWeight.w900,
                                           fontFamily: 'ElMessiri',
@@ -206,7 +206,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                       Text(
                                         '${employee.getTypeName()} في مدرسة محصلتي',
                                         style: const TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 12,
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w900,
                                           fontFamily: 'ElMessiri',
@@ -253,7 +253,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.2),
                                       spreadRadius: 2,
-                                      blurRadius: 5,
+                                      blurRadius: 2,
                                       offset: const Offset(
                                           0, 3), // changes position of shadow
                                     ),
@@ -278,7 +278,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 30),
@@ -345,6 +345,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                     );
                                   },
                                   child: Card(
+                                    color: Colors.white,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 0),
                                     shape: RoundedRectangleBorder(
@@ -387,7 +388,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                                   userImage: Image.asset(
                                                       'images/2024_04_11_15_19_IMG_6269.JPG'),
                                                   ringColor:
-                                                      Colors.indigoAccent[400],
+                                                      const Color.fromARGB(
+                                                          255, 0, 0, 0),
                                                   elevation: 3.0,
                                                   radius: 20,
                                                 ),
@@ -408,9 +410,9 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                                           FontWeight.w900,
                                                       color: Colors.grey),
                                                 ),
-                                                trailing:
-                                                    const Icon(Icons.more_vert),
-                                                onTap: () {},
+                                                // trailing:
+                                                //     const Icon(Icons.more_vert),
+                                                // onTap: () {},
                                               );
                                             },
                                           ),
@@ -433,6 +435,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                     );
                                   },
                                   child: Card(
+                                    color: Colors.white,
                                     margin: const EdgeInsets.symmetric(
                                         horizontal: 0),
                                     shape: RoundedRectangleBorder(
@@ -471,7 +474,8 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                                   userImage: Image.asset(
                                                       'images/2024_04_11_15_19_IMG_6269.JPG'),
                                                   ringColor:
-                                                      Colors.indigoAccent[400],
+                                                      const Color.fromARGB(
+                                                          255, 0, 0, 0),
                                                   spaceWidth: 4.5,
                                                   elevation: 3.0,
                                                   radius: 20,
@@ -493,9 +497,9 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                                       fontWeight:
                                                           FontWeight.w900),
                                                 ),
-                                                trailing:
-                                                    const Icon(Icons.more_vert),
-                                                onTap: () {},
+                                                // trailing:
+                                                //     const Icon(Icons.more_vert),
+                                                // onTap: () {},
                                               );
                                             },
                                           ),
@@ -704,7 +708,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                       color: Colors.white,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -840,7 +844,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                       color: Colors.white,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -856,7 +860,7 @@ class _Splash_ScreenState extends State<Splash_Screen> {
                                 ),
                                 Expanded(
                                   child: Lottie.asset(
-                                    'images/anime/Animation - 1720703446908.json',
+                                    'images/anime/Animation - 1721417615259 (1).json',
                                     width: 100,
                                     height: 100,
                                   ),

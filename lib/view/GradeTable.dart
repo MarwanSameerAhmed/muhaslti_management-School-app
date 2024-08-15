@@ -48,139 +48,159 @@ class _GradeTableState extends State<GradeTable> {
     return MaterialApp(
         home: SafeArea(
             child: Scaffold(
-                body: Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 25.0),
-        child: Container(
-          width: double.infinity,
-          height: 200,
-          child: Card(
-            color: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            margin: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 0,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20.0, bottom: 50),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FullScreenImage(
-                              imageUrl: imageUrl,
-                              imagePath: imageUrl,
-                            ),
+                backgroundColor: Colors.grey[200],
+                body: SingleChildScrollView(
+                  child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        child: Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          margin: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 0,
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 20.0, bottom: 50),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => FullScreenImage(
+                                            imageUrl: imageUrl,
+                                            imagePath: imageUrl,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 15.0),
+                                      child: FancyAvatar(
+                                        userImage: Image.asset(imageUrl),
+                                        ringColor:
+                                            const Color.fromARGB(255, 0, 0, 0),
+                                        spaceWidth: 4.5,
+                                        elevation: 10.0,
+                                        radius: 50,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15.0, right: 0, top: 35),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'الاسم الكامل',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'ElMessiri',
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      'الصف',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: 'ElMessiri',
+                                          fontWeight: FontWeight.w900),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      'الشعبة',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: 'ElMessiri',
+                                          fontWeight: FontWeight.w900),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 40.0),
+                                  child: Lottie.asset(
+                                      'images/anime/Animation - 1719841093260.json',
+                                      width: double.infinity,
+                                      height: 400),
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                      child: FancyAvatar(
-                        userImage: Image.asset(imageUrl),
-                        ringColor: Color.fromARGB(255, 12, 83, 206),
-                        spaceWidth: 4.5,
-                        elevation: 10.0,
-                        radius: 50,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, right: 0, top: 35),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'الاسم الكامل',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'ElMessiri',
-                            fontWeight: FontWeight.w900),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(
+                              label: Text('الاسبوع',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                          DataColumn(
+                              label: Text('الشفوي',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                          DataColumn(
+                              label: Text('الواجبات',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                          DataColumn(
+                              label: Text('التحريري',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                          DataColumn(
+                              label: Text('السلوك',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                          DataColumn(
+                              label: Text('المجموع',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'ElMessiri'))),
+                        ],
+                        rows: data.map((row) {
+                          final total =
+                              (int.tryParse(row['oral'] ?? '0') ?? 0) +
+                                  (int.tryParse(row['homework'] ?? '0') ?? 0) +
+                                  (int.tryParse(row['written'] ?? '0') ?? 0) +
+                                  (int.tryParse(row['behavior'] ?? '0') ?? 0);
+                          return DataRow(cells: [
+                            DataCell(Text(row['week']!,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: 'ElMessiri'))),
+                            DataCell(buildEditableCell(row, 'oral')),
+                            DataCell(buildEditableCell(row, 'homework')),
+                            DataCell(buildEditableCell(row, 'written')),
+                            DataCell(buildEditableCell(row, 'behavior')),
+                            DataCell(Text(total.toString())),
+                          ]);
+                        }).toList(),
                       ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        'الصف',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'ElMessiri',
-                            fontWeight: FontWeight.w900),
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Text(
-                        'الشعبة',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontFamily: 'ElMessiri',
-                            fontWeight: FontWeight.w900),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Lottie.asset(
-                      'images/anime/Animation - 1719841093260.json',
-                      width: double.infinity,
-                      height: 400),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: const [
-            DataColumn(
-                label: Text('الاسبوع',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-            DataColumn(
-                label: Text('الشفوي',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-            DataColumn(
-                label: Text('الواجبات',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-            DataColumn(
-                label: Text('التحريري',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-            DataColumn(
-                label: Text('السلوك',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-            DataColumn(
-                label: Text('المجموع',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-          ],
-          rows: data.map((row) {
-            final total = (int.tryParse(row['oral'] ?? '0') ?? 0) +
-                (int.tryParse(row['homework'] ?? '0') ?? 0) +
-                (int.tryParse(row['written'] ?? '0') ?? 0) +
-                (int.tryParse(row['behavior'] ?? '0') ?? 0);
-            return DataRow(cells: [
-              DataCell(Text(row['week']!,
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900, fontFamily: 'ElMessiri'))),
-              DataCell(buildEditableCell(row, 'oral')),
-              DataCell(buildEditableCell(row, 'homework')),
-              DataCell(buildEditableCell(row, 'written')),
-              DataCell(buildEditableCell(row, 'behavior')),
-              DataCell(Text(total.toString())),
-            ]);
-          }).toList(),
-        ),
-      ),
-    ]))));
+                    ),
+                  ]),
+                ))));
   }
 
   Widget buildEditableCell(Map<String, String> row, String key) {

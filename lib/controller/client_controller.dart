@@ -1,6 +1,14 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:http/http.dart' as http;
+import 'package:muhaslti/api/MSTRequst.dart';
+import 'package:muhaslti/api/login_response.dart';
+import 'package:muhaslti/api/mst_response.dart';
+import 'package:muhaslti/api/student/StudentResponse.dart';
+import 'package:muhaslti/api/student/studentReqest.dart';
 import 'package:muhaslti/model/Employee.dart';
+import 'package:muhaslti/view/CreateStudent1.0.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../view/main.dart';
 
 class ClientController {
@@ -24,14 +32,106 @@ class ClientController {
     }
   }
 
-  static Future<String> login(String username, String password) async {
-    Map<String, dynamic> data = {"username": username, "password": password};
-    String response = await request("login", jsonEncode(data));
-    if (int.tryParse(response) != null) {
-      response = _createErrorJson(int.parse(response));
+  // Future<String?> getAuthToken() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('auth_token');
+  // }
+
+  // Future<void> someApiRequest() async {
+  //   String? token = await getAuthToken();
+  //   if (token == null) {
+  //     throw Exception("No auth token found");
+  //   }
+  // }
+
+  // Future<MSTResponse?> request2(MSTRequst request) async {
+  //   String sUrl = 'http://192.168.0.111:5000/api';
+  //   if (request is Studentreqest) {
+  //     sUrl += '/Student/Create';
+  //   }
+  //   var url = Uri.parse(sUrl);
+
+  //   try {
+  //     String? token = await getAuthToken();
+
+  //     var headers = {
+  //       'Content-Type': 'application/json',
+  //       if (token != null) 'Authorization': 'Bearer $token',
+  //     };
+
+  //     // إرسال الطلب
+  //     var response = await http.post(
+  //       url,
+  //       body: jsonEncode(request.toMap()),
+  //       headers: headers,
+  //     );
+  //     print('Response status: ${response.statusCode}');
+  //     print('Response body: ${response.body}');
+
+  //     if (response.statusCode == 200) {
+  //       if (response.body.contains("MessageDescription")) {
+  //         Map<String, dynamic> result = jsonDecode(response.body);
+  //         MSTResponse? response2 = null;
+  //         if (request is Studentreqest)
+  //           response2 = StudentResponse.fromMap(result);
+  //         if (response2 == null) {
+  //           throw Exception("Unknown exception");
+  //         }
+  //         if (response2.responseCode == "1") {
+  //           return response2;
+  //         } else {
+  //           throw Exception(response2.messageDescription);
+  //         }
+  //       } else {
+  //         throw Exception("Unexpected response format: ${response.body}");
+  //       }
+  //     } else {
+  //       throw Exception(
+  //           "HTTP request failed with status: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print('Request failed: $e');
+  //     rethrow;
+  //   }
+  // }
+
+  static Future<LoginResponse?> login(String username, String password) async {
+    var url = Uri.parse('http://192.168.0.111:5000/api/Authentication');
+
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+
+    var response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': basicAuth,
+    });
+    if (response == null) {
+      throw Exception("Unknow exception");
+    } else if (response.body.contains("MessageDescription")) {
+      // في حالة تم الإتصال بالـ API
+      Map<String, dynamic> result = jsonDecode(response.body);
+      LoginResponse loginResponse = LoginResponse.fromMap(result);
+      if (loginResponse.responseCode == "1") {
+        String token = loginResponse.token!;
+        await TokenManager.saveToken(token);
+        return loginResponse;
+      } else {
+        // في حالة حدوث اي خطأ
+        throw Exception(loginResponse.messageDescription);
+      }
+    } else {
+      throw Exception(response.body);
     }
-    return response;
   }
+
+  // static Future<String> login(String username, String password) async {
+  //   Map<String, dynamic> data = {"username": username, "password": password};
+  //   String response = await request("login", jsonEncode(data));
+  //   if (int.tryParse(response) != null) {
+  //     response = _createErrorJson(int.parse(response));
+  //   }
+  //   return response;
+  // }
 
   static String _createErrorJson(int errorCode) =>
       '{"error_code":$errorCode, "data":"null"}';

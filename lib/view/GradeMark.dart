@@ -68,12 +68,15 @@ class _GradeStudentMarkState extends State<GradeStudentMark> {
                               ),
                             );
                           },
-                          child: FancyAvatar(
-                            userImage: Image.asset(imageUrl),
-                            ringColor: Color.fromARGB(255, 12, 83, 206),
-                            spaceWidth: 4.5,
-                            elevation: 10.0,
-                            radius: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 15.0),
+                            child: FancyAvatar(
+                              userImage: Image.asset(imageUrl),
+                              ringColor: const Color.fromARGB(255, 0, 0, 0),
+                              spaceWidth: 4.5,
+                              elevation: 10.0,
+                              radius: 50,
+                            ),
                           ),
                         ),
                       ),
@@ -114,10 +117,13 @@ class _GradeStudentMarkState extends State<GradeStudentMark> {
                       ),
                     ),
                     Expanded(
-                      child: Lottie.asset(
-                          'images/anime/Animation - 1719841093260.json',
-                          width: double.infinity,
-                          height: 400),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 40.0),
+                        child: Lottie.asset(
+                            'images/anime/Animation - 1719841093260.json',
+                            width: double.infinity,
+                            height: 400),
+                      ),
                     ),
                   ],
                 ),

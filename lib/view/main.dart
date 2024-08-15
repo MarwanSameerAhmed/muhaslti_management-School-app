@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,8 +22,8 @@ void main() {
     ChangeNotifierProvider(
       create: (context) =>
           Employee.emptyEmployee, // Create and provide the Employee instance
-      child: const MaterialApp(
-        home: NewLoginPage(),
+      child: MaterialApp(
+        home: FirstLaunchHandler(),
       ),
     ),
   );
@@ -36,53 +37,53 @@ class MyApp extends StatelessWidget {
     Settings.loadSettings();
     Provider.of<Employee>(context).setColor();
     return MaterialApp(
-      theme: ThemeData(primaryColor: Employee.color),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate
-      ],
-      supportedLocales: const [
-        Locale('ar', 'AE'),
-      ],
-      home: AnimatedSplashScreen(
-          duration: 2000,
-          splashTransition: SplashTransition.fadeTransition,
-          splash: Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: const Image(
-                      image: AssetImage(
-                          'images/WhatsApp Image 2023-10-17 at 19.10.56_8770f79d.jpg')),
-                  height: 100,
-                  width: 100,
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: const Text(
-                    'Muhasilati',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-              ),
-            ]),
-          ),
-          nextScreen: const NewLoginPage()),
-      debugShowCheckedModeBanner: false
-    );
+        theme: ThemeData(primaryColor: Employee.color),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: const [
+          Locale('ar', 'AE'),
+        ],
+        home: AnimatedSplashScreen(
+            duration: 2000,
+            splashTransition: SplashTransition.fadeTransition,
+            splash: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        child: const Image(
+                            image: AssetImage(
+                                'images/WhatsApp Image 2023-10-17 at 19.10.56_8770f79d.jpg')),
+                        height: 100,
+                        width: 100,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: const Text(
+                          'Muhasilati',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                    ),
+                  ]),
+            ),
+            nextScreen: const NewLoginPage()),
+        debugShowCheckedModeBanner: false);
   }
 }
 
 class Settings {
-  static Map<String, dynamic> settings = {'ip': 'test'};
+  static Map<String, dynamic> settings = {'ip': ''};
 
   static Future<bool> requestPermission() async {
     PermissionStatus permissionStatus = await Permission.storage.status;

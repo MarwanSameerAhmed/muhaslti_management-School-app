@@ -25,9 +25,10 @@ class _SubjectCardState extends State<SubjectCard> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => StudentGradeInfo()));
+            .push(MaterialPageRoute(builder: (context) => const StudentGradeInfo()));
       },
       child: Card(
+        color: Colors.white,
         child: Container(
           height: 140,
           width: 100,
@@ -44,11 +45,11 @@ class _SubjectCardState extends State<SubjectCard> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Expanded(
                   child: Text(
                     widget.subjectName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w900,
                         color: Colors.black,
