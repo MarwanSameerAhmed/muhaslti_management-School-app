@@ -4,15 +4,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:muhaslti/api/MSTRequst.dart';
 import 'package:muhaslti/api/employee/EmployeeRequest.dart';
 import 'package:muhaslti/api/employee/EmployeeResponse.dart';
 import 'package:muhaslti/api/mst_response.dart';
 import 'package:muhaslti/model/Employee.dart';
-import 'package:muhaslti/model/Manager.dart';
 import 'package:muhaslti/view/CreateStudent1.0.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -74,11 +71,8 @@ class _MyWidgetState extends State<MyWidget> {
     }
   }
 
-  File? _selectedImage;
-
   @override
   Widget build(BuildContext context) {
-    Employee currentEmployee = Provider.of<Employee>(context);
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return SafeArea(
