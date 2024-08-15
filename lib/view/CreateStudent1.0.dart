@@ -108,7 +108,7 @@ class _CreateStudentNewState extends State<CreateStudentNew> {
                           Icon(Icons.add_box),
                           SizedBox(width: 10),
                           Text(
-                            'إضافة طالب',
+                            '4إضافة طالب',
                             style: TextStyle(
                                 fontFamily: 'ElMessiri',
                                 fontSize: 30,
