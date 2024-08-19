@@ -839,7 +839,7 @@ class _NewLoginPageState extends State<NewLoginPage>
         height: 100, // تعديل الارتفاع حسب الحاجة
         width: 100, // تعديل العرض حسب الحاجة
         child: Lottie.asset(
-            'images/anime/Animation - 1723493126422.json'), // استبدل بهذا الويدجيت الخاص بالأنيميشن الصباحي
+            'images/anime/Animation - 1723490127236.json'), // استبدل بهذا الويدجيت الخاص بالأنيميشن الصباحي
       );
     } else {
       return Container(

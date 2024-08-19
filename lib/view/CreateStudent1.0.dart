@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,51 +35,6 @@ class _CreateStudentNewState extends State<CreateStudentNew> {
   File? _selectedImage;
   final storage = FlutterSecureStorage();
 
-  Future<MSTResponse?> request2(MSTRequst request) async {
-    String sUrl = 'http://192.168.0.111:5000/api';
-    if (request is Studentreqest) {
-      sUrl += '/Student/Create';
-    }
-    var url = Uri.parse(sUrl);
-
-    try {
-      String? token = await TokenManager.getToken();
-
-      var headers = {
-        'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token',
-      };
-
-      var response = await http.post(
-        url,
-        body: jsonEncode(request.toMap()),
-        headers: headers,
-      );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      if (response.body.contains("MessageDescription")) {
-        Map<String, dynamic> result = jsonDecode(response.body);
-        MSTResponse? response2 = null;
-        if (request is Studentreqest)
-          response2 = StudentResponse.fromMap(result);
-        if (response2 == null) {
-          throw Exception("Unknown exception");
-        }
-        if (response2.responseCode == "1") {
-          return response2;
-        } else {
-          throw Exception(response2.messageDescription);
-        }
-      } else {
-        throw Exception("Unexpected response format: ${response.body}");
-      }
-    } catch (e) {
-      print('Request failed: $e');
-      rethrow;
-    }
-  }
-
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController parentNameController = TextEditingController();
   TextEditingController studentNameController = TextEditingController();
@@ -87,6 +44,7 @@ class _CreateStudentNewState extends State<CreateStudentNew> {
   @override
   Widget build(BuildContext context) {
     final isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
+    final yourController = Get.put(ClientController());
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[200],
@@ -318,7 +276,8 @@ class _CreateStudentNewState extends State<CreateStudentNew> {
                                 LevelNumber: LevelController.text,
                                 StudentBirthDate: birthDateController.text,
                               );
-                              var response = await request2(studentRequest);
+                              var response = await yourController.MainRequest(
+                                  studentRequest);
 
                               if (response != null) {
                                 if (response.responseCode == "1") {
@@ -671,56 +630,126 @@ class _CreateStudentNewState extends State<CreateStudentNew> {
 
   void showCustomSnackBar(
       BuildContext context, String message, String subMessage) {
+    bool _isExpanded = false;
+    bool _showMoreButton = false;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Row(
-                textDirection: TextDirection.rtl,
-                children: [
-                  Lottie.asset(
-                    'images/anime/Animation - 1723325601946.json',
-                    width: 48,
-                    height: 48,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          message,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 17,
-                            fontFamily: 'ElMessiri',
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        Text(
-                          subMessage,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 12,
-                            fontFamily: 'ElMessiri',
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            if (!_showMoreButton) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                final messagePainter = TextPainter(
+                  text: TextSpan(
+                    text: message,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 17,
+                      fontFamily: 'ElMessiri',
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
-                ],
-              ),
-            ),
-          ],
+                  textDirection: TextDirection.rtl,
+                  maxLines: 1,
+                )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
+                final subMessagePainter = TextPainter(
+                  text: TextSpan(
+                    text: subMessage,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                      fontFamily: 'ElMessiri',
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  textDirection: TextDirection.rtl,
+                  maxLines: 1,
+                )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
+
+                if (messagePainter.size.height > 24 ||
+                    subMessagePainter.size.height > 16) {
+                  setState(() {
+                    _showMoreButton = true;
+                  });
+                }
+              });
+            }
+
+            return Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    children: [
+                      Lottie.asset(
+                        'images/anime/Animation - 1723325601946.json',
+                        width: 48,
+                        height: 48,
+                        fit: BoxFit.cover,
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              message,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17,
+                                fontFamily: 'ElMessiri',
+                                fontWeight: FontWeight.w900,
+                              ),
+                              maxLines: _isExpanded ? null : 1,
+                              overflow: _isExpanded
+                                  ? TextOverflow.visible
+                                  : TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              subMessage,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                fontFamily: 'ElMessiri',
+                                fontWeight: FontWeight.w900,
+                              ),
+                              maxLines: _isExpanded ? null : 1,
+                              overflow: _isExpanded
+                                  ? TextOverflow.visible
+                                  : TextOverflow.ellipsis,
+                            ),
+                            if (_showMoreButton)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isExpanded = !_isExpanded;
+                                  });
+                                },
+                                child: Text(
+                                  _isExpanded ? "عرض أقل" : "عرض المزيد",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 12,
+                                    fontFamily: 'ElMessiri',
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
         ),
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,

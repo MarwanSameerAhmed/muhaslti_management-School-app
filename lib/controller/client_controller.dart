@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:http/http.dart' as http;
 import 'package:muhaslti/api/MSTRequst.dart';
+import 'package:muhaslti/api/employee/EmployeeRequest.dart';
+import 'package:muhaslti/api/employee/EmployeeResponse.dart';
 import 'package:muhaslti/api/login_response.dart';
 import 'package:muhaslti/api/mst_response.dart';
 import 'package:muhaslti/api/student/StudentResponse.dart';
@@ -11,7 +14,7 @@ import 'package:muhaslti/view/CreateStudent1.0.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../view/main.dart';
 
-class ClientController {
+class ClientController extends GetxController{
   static Future<String> request(String method, String data) async {
     String ip = Settings.settings.containsKey('ip')
         ? Settings.settings['ip']
@@ -123,6 +126,61 @@ class ClientController {
       throw Exception(response.body);
     }
   }
+
+  Future<MSTResponse?> MainRequest(MSTRequst request) async {
+  String sUrl = 'http://192.168.0.111:5000/api';
+  if (request is Studentreqest) {
+    sUrl += '/Student/Create';
+  } else if (request is EmployeeRequest) {
+    sUrl += '/Employee/Create';
+  } else {
+    throw Exception("Unsupported request type");
+  }
+  
+  var url = Uri.parse(sUrl);
+
+  try {
+    String? token = await TokenManager.getToken();
+
+    var headers = {
+      'Content-Type': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    };
+
+    var response = await http.post(
+      url,
+      body: jsonEncode(request.toMap()),
+      headers: headers,
+    );
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.body.contains("MessageDescription")) {
+      Map<String, dynamic> result = jsonDecode(response.body);
+      MSTResponse? responseObj = null;
+
+      if (request is Studentreqest) {
+        responseObj = StudentResponse.fromMap(result);
+      } else if (request is EmployeeRequest) {
+        responseObj = EmployeeResponse.fromMap(result);
+      }
+
+      if (responseObj == null) {
+        throw Exception("Unknown exception");
+      }
+      if (responseObj.responseCode == "1") {
+        return responseObj;
+      } else {
+        throw Exception(responseObj.messageDescription);
+      }
+    } else {
+      throw Exception("Unexpected response format: ${response.body}");
+    }
+  } catch (e) {
+    print('Request failed: $e');
+    rethrow;
+  }
+}
 
   // static Future<String> login(String username, String password) async {
   //   Map<String, dynamic> data = {"username": username, "password": password};
